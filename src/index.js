@@ -1,17 +1,33 @@
-import axios from 'axios';
+import { fetchBreeds, fetchCatByBreed } from './js/cat-api';
 
-axios.defaults.baseURL = 'https://api.thecatapi.com/v1/';
-axios.defaults.headers.common['x-api-key'] =
-  'live_LOZ5JQyh4UK3FAeNUMFWc4HHTdIiQ03XwsDk9x0Zh8ot4grNmgQ6tDHacxncGHiH';
+const selectElement = document.querySelector('.breed-select');
 
-axios
-  .get('breeds')
-  .then(response => {
-    console.log(response);
-    const breedNames = response.data.map(breed => breed.name);
-    console.log('🚀  breedNames:', breedNames);
+selectElement.addEventListener('change', onSelectChange);
+
+fetchBreeds()
+  .then(breeds => {
+    addBreedsToSelect(selectElement, createOptionsMarkup(breeds));
   })
   .catch(error => console.log(error));
+
+function createOptionsMarkup(cats) {
+  return cats
+    .map(({ id, name }) => {
+      return `
+    <option value='${id}'>${name}</option>
+    `;
+    })
+    .join('');
+}
+
+function addBreedsToSelect(selectEl, options) {
+  selectEl.insertAdjacentHTML('beforeend', options);
+}
+
+function onSelectChange(evt) {
+  const id = evt.target.value;
+  fetchCatByBreed(id).then(response => console.log(response));
+}
 
 // const headers = new Headers({
 //   'Content-Type': 'application/json',
