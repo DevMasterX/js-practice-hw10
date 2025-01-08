@@ -1,14 +1,19 @@
 import { fetchBreeds, fetchCatByBreed } from './js/cat-api';
 
 const selectElement = document.querySelector('.breed-select');
+const catInfo = document.querySelector('.cat-info');
 
-selectElement.addEventListener('change', onSelectChange);
+selectElement.innerHTML = `
+    <option value=''>Select a cat breed 😸</option>
+    `;
 
 fetchBreeds()
   .then(breeds => {
     addBreedsToSelect(selectElement, createOptionsMarkup(breeds));
   })
   .catch(error => console.log(error));
+
+selectElement.addEventListener('change', onSelectChange);
 
 function createOptionsMarkup(cats) {
   return cats
@@ -26,8 +31,22 @@ function addBreedsToSelect(selectEl, options) {
 
 function onSelectChange(evt) {
   const id = evt.target.value;
-  fetchCatByBreed(id).then(response => console.log(response));
+  fetchCatByBreed(id).then(breed => {
+    console.log(breed);
+    // createBreedMarkup(breed);
+  });
 }
+
+// function createBreedMarkup(breed) {
+//   catInfo.innerHTML = `<img class="breed-image" alt=${breed.name} src=${imageUrl}>
+//                         <div class="breed-container">
+//                         <h2 class="breed-name"> ${breed.name}</h2>
+//                         <p class="breed-temperament"> ${breed.temperament}</p>
+//                         <p class="breed-description"> ${breed.description}</p>
+//                     </div>`;
+// }
+
+console.log(44);
 
 // const headers = new Headers({
 //   'Content-Type': 'application/json',
