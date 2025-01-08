@@ -31,22 +31,26 @@ function addBreedsToSelect(selectEl, options) {
 
 function onSelectChange(evt) {
   const id = evt.target.value;
-  fetchCatByBreed(id).then(breed => {
-    console.log(breed);
-    // createBreedMarkup(breed);
+  fetchCatByBreed(id).then(data => {
+    const breed = {
+      imageUrl: data.url,
+      name: data.breeds[0].name,
+      description: data.breeds[0].description,
+      temperament: data.breeds[0].temperament,
+    };
+
+    createBreedMarkup(breed);
   });
 }
 
-// function createBreedMarkup(breed) {
-//   catInfo.innerHTML = `<img class="breed-image" alt=${breed.name} src=${imageUrl}>
-//                         <div class="breed-container">
-//                         <h2 class="breed-name"> ${breed.name}</h2>
-//                         <p class="breed-temperament"> ${breed.temperament}</p>
-//                         <p class="breed-description"> ${breed.description}</p>
-//                     </div>`;
-// }
-
-console.log(44);
+function createBreedMarkup({ imageUrl, name, description, temperament }) {
+  catInfo.innerHTML = `<img class="breed-image" alt=${name} src=${imageUrl}>
+                        <div class="breed-container">
+                        <h2 class="breed-name"> ${name}</h2>
+                        <p class="breed-temperament"> ${temperament}</p>
+                        <p class="breed-description"> ${description}</p>
+                    </div>`;
+}
 
 // const headers = new Headers({
 //   'Content-Type': 'application/json',
