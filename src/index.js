@@ -2,6 +2,8 @@ import { fetchBreeds, fetchCatByBreed } from './js/cat-api';
 
 const selectElement = document.querySelector('.breed-select');
 const catInfo = document.querySelector('.cat-info');
+const loader = document.querySelector('.loader');
+const errorEl = document.querySelector('.error');
 
 selectElement.innerHTML = `
     <option value=''>Select a cat breed 😸</option>
@@ -30,26 +32,46 @@ function addBreedsToSelect(selectEl, options) {
 }
 
 function onSelectChange(evt) {
+  selectElement.style.display = 'none';
+  loader.textContent = 'Loading data, please wait...';
   const id = evt.target.value;
-  fetchCatByBreed(id).then(data => {
-    const breed = {
-      imageUrl: data.url,
-      name: data.breeds[0].name,
-      description: data.breeds[0].description,
-      temperament: data.breeds[0].temperament,
-    };
+  // const id = 1;
 
-    createBreedMarkup(breed);
-  });
+  fetchCatByBreed(id)
+    .then(data => {
+      const breed = {
+        imageUrl: data.url,
+        name: data.breeds[0].name,
+        description: data.breeds[0].description,
+        temperament: data.breeds[0].temperament,
+      };
+
+      createBreedMarkup(breed);
+      selectElement.style.display = 'block';
+    })
+    .catch(error => {
+      console.log(error);
+      errorEl.textContent =
+        'Oops! Something went wrong! Try reloading the page!';
+    })
+    .finally(() => {
+      loader.textContent = '';
+    });
 }
 
 function createBreedMarkup({ imageUrl, name, description, temperament }) {
-  catInfo.innerHTML = `<img class="breed-image" alt=${name} src=${imageUrl}>
+  catInfo.innerHTML = `<div class="image-container">
+                          <img class="breed-image" alt=${name} src=${imageUrl}>
+                        </div>
                         <div class="breed-container">
-                        <h2 class="breed-name"> ${name}</h2>
-                        <p class="breed-temperament"> ${temperament}</p>
-                        <p class="breed-description"> ${description}</p>
-                    </div>`;
+                          <h2 class="breed-name"> ${name}</h2>
+                          <p class="breed-temperament"> ${temperament}</p>
+                          <p class="breed-description"> ${description}</p>
+                        </div>
+                    
+                    `;
+
+  // Устанавливаем фоновое изображение с плавным переходом
 }
 
 // const headers = new Headers({
