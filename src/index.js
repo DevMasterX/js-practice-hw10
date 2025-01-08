@@ -1,17 +1,25 @@
 import { fetchBreeds, fetchCatByBreed } from './js/cat-api';
+import SlimSelect from 'slim-select';
+import 'slim-select/dist/slimselect.css';
 
 const selectElement = document.querySelector('.breed-select');
 const catInfo = document.querySelector('.cat-info');
-const loader = document.querySelector('.loader');
+const loaderText = document.querySelector('.loader-text');
 const errorEl = document.querySelector('.error');
-
-selectElement.innerHTML = `
-    <option value=''>Select a cat breed 😸</option>
-    `;
+const selectWrapper = document.querySelector('.select-wrapper');
+// selectElement.innerHTML = `
+//     <option value=''>Select a cat breed 😸</option>
+//     `;
 
 fetchBreeds()
   .then(breeds => {
     addBreedsToSelect(selectElement, createOptionsMarkup(breeds));
+
+    new SlimSelect({
+      select: selectElement,
+      placeholder: 'Select a cat breed 😸',
+      // allowDeselect: true,
+    });
   })
   .catch(error => console.log(error));
 
@@ -32,8 +40,8 @@ function addBreedsToSelect(selectEl, options) {
 }
 
 function onSelectChange(evt) {
-  selectElement.style.display = 'none';
-  loader.textContent = 'Loading data, please wait...';
+  selectWrapper.style.display = 'none';
+  loaderText.textContent = 'Loading data, please wait...';
   const id = evt.target.value;
   // const id = 1;
 
@@ -47,7 +55,7 @@ function onSelectChange(evt) {
       };
 
       createBreedMarkup(breed);
-      selectElement.style.display = 'block';
+      selectWrapper.style.display = 'block';
     })
     .catch(error => {
       console.log(error);
@@ -55,7 +63,7 @@ function onSelectChange(evt) {
         'Oops! Something went wrong! Try reloading the page!';
     })
     .finally(() => {
-      loader.textContent = '';
+      loaderText.textContent = '';
     });
 }
 
@@ -70,8 +78,6 @@ function createBreedMarkup({ imageUrl, name, description, temperament }) {
                         </div>
                     
                     `;
-
-  // Устанавливаем фоновое изображение с плавным переходом
 }
 
 // const headers = new Headers({
