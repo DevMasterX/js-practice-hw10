@@ -4,13 +4,14 @@ import 'slim-select/dist/slimselect.css';
 
 const selectElement = document.querySelector('.breed-select');
 const catInfo = document.querySelector('.cat-info');
-const loaderText = document.querySelector('.loader-text');
+
+const loader = document.querySelector('.loader');
 const errorEl = document.querySelector('.error');
 const selectWrapper = document.querySelector('.select-wrapper');
 // selectElement.innerHTML = `
 //     <option value=''>Select a cat breed 😸</option>
 //     `;
-
+showLoader();
 fetchBreeds()
   .then(breeds => {
     addBreedsToSelect(selectElement, createOptionsMarkup(breeds));
@@ -20,6 +21,7 @@ fetchBreeds()
       placeholder: 'Select a cat breed 😸',
       // allowDeselect: true,
     });
+    hideLoader();
   })
   .catch(error => console.log(error));
 
@@ -41,7 +43,9 @@ function addBreedsToSelect(selectEl, options) {
 
 function onSelectChange(evt) {
   selectWrapper.style.display = 'none';
-  loaderText.textContent = 'Loading data, please wait...';
+  showLoader();
+  catInfo.innerHTML = '';
+  // loaderText.textContent = 'Loading data, please wait...';
   const id = evt.target.value;
   // const id = 1;
 
@@ -63,7 +67,7 @@ function onSelectChange(evt) {
         'Oops! Something went wrong! Try reloading the page!';
     })
     .finally(() => {
-      loaderText.textContent = '';
+      hideLoader();
     });
 }
 
@@ -80,6 +84,13 @@ function createBreedMarkup({ imageUrl, name, description, temperament }) {
                     `;
 }
 
+function hideLoader() {
+  loader.classList.add('hidden');
+}
+
+function showLoader() {
+  loader.classList.remove('hidden');
+}
 // const headers = new Headers({
 //   'Content-Type': 'application/json',
 //   'x-api-key':
