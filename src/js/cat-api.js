@@ -8,14 +8,32 @@ function fetchBreeds() {
   return axios
     .get('breeds')
     .then(response => response.data)
-    .catch(error => console.log(error));
+    .catch(() => {
+      Notiflix.Notify.failure(
+        `❌ OOPS! Something went wrong! Try reloading the page`,
+        {
+          width: '30%',
+          clickToClose: true,
+          fontSize: '16px',
+        }
+      );
+    });
 }
 
 function fetchCatByBreed(breedId) {
   return axios
     .get(`images/search?breed_ids=${breedId}`)
     .then(response => response.data[0])
-    .catch(error => console.log(error));
+    .catch(() => {
+      Notiflix.Notify.failure(
+        `❌ OOPS! Something went wrong! Try reloading the page`,
+        {
+          width: '30%',
+          clickToClose: true,
+          fontSize: '16px',
+        }
+      );
+    });
 }
 
 export { fetchBreeds, fetchCatByBreed };

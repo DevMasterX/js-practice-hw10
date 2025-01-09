@@ -1,3 +1,5 @@
+import Notiflix from 'notiflix';
+
 import { fetchBreeds, fetchCatByBreed } from './js/cat-api';
 import SlimSelect from 'slim-select';
 import 'slim-select/dist/slimselect.css';
@@ -21,9 +23,18 @@ fetchBreeds()
       placeholder: 'Select a cat breed 😸',
       // allowDeselect: true,
     });
-    hideLoader();
   })
-  .catch(error => console.log(error));
+  .catch(() => {
+    Notiflix.Notify.failure(
+      `❌ OOPS! Something went wrong! Try reloading the page`,
+      {
+        width: '30%',
+        clickToClose: true,
+        fontSize: '16px',
+      }
+    );
+  })
+  .finally(hideLoader);
 
 selectElement.addEventListener('change', onSelectChange);
 
@@ -61,14 +72,17 @@ function onSelectChange(evt) {
       createBreedMarkup(breed);
       selectWrapper.style.display = 'block';
     })
-    .catch(error => {
-      console.log(error);
-      errorEl.textContent =
-        'Oops! Something went wrong! Try reloading the page!';
+    .catch(() => {
+      Notiflix.Notify.failure(
+        `❌ OOPS! Something went wrong! Try reloading the page`,
+        {
+          width: '30%',
+          clickToClose: true,
+          fontSize: '16px',
+        }
+      );
     })
-    .finally(() => {
-      hideLoader();
-    });
+    .finally(hideLoader);
 }
 
 function createBreedMarkup({ imageUrl, name, description, temperament }) {
