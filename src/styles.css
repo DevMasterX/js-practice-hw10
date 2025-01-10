@@ -94,7 +94,7 @@ select {
   font-size: 25px;
   text-align: center;
 } */
-
+/* 
 .error {
   margin-top: 100px;
   text-align: center;
@@ -103,7 +103,7 @@ select {
   font-weight: 600;
 
   animation: scale 2s linear infinite, bounce 0.3s ease infinite;
-}
+} */
 
 .breed-select {
   appearance: none;
@@ -198,6 +198,14 @@ select {
   .breed-container {
     flex: 1; /* Элемент занимает равное пространство */
   }
+}
+
+.cat-info {
+  padding: 30px;
+  border-radius: 60px;
+  -webkit-box-shadow: 0px 22px 63px 10px rgba(34, 60, 80, 0.2);
+  -moz-box-shadow: 0px 22px 63px 10px rgba(34, 60, 80, 0.2);
+  box-shadow: 0px 22px 63px 10px rgba(34, 60, 80, 0.2);
 }
 
 /* Medium desktops (min-width: 1024px) */
